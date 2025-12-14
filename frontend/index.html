@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Census 2026 Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100 h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white border-b px-4 py-3">
+      <div class="max-w-6xl mx-auto flex items-center justify-between">
+        <!-- Left: Logo + Title -->
+        <div class="flex items-center gap-3">
+          <img
+            src="./census_hub.png"
+            alt="Census Logo"
+            class="w-8 h-8 object-contain"
+          />
+          <h1 class="font-semibold text-lg">Census GPT</h1>
+        </div>
+
+        <!-- Right: Phone -->
+        <div class="text-sm text-gray-600">
+          📞 <span class="font-medium">+998 (71) 202-8175</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chat Area -->
+    <main
+      id="chat"
+      class="flex-1 overflow-y-auto px-4 py-6 space-y-6 max-w-4xl mx-auto w-full"
+    ></main>
+
+    <!-- Input Area -->
+    <footer class="bg-white border-t p-4">
+      <br>
+      <div class="max-w-4xl mx-auto flex gap-3">
+        <input
+          id="message"
+          type="text"
+          placeholder="Savolingizni yozing..."
+          class="flex-1 border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onkeydown="if(event.key==='Enter') sendMessage()"
+        />
+        <button
+          onclick="sendMessage()"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl transition"
+        >
+          ➤
+        </button>
+      </div>
+      <br>
+    </footer>
+
+    <script>
+      const chat = document.getElementById('chat');
+      const input = document.getElementById('message');
+
+      function addUserMessage(text) {
+        chat.innerHTML += `
+          <div class="flex justify-end">
+            <div class="max-w-xl bg-blue-600 text-white px-4 py-3 rounded-2xl rounded-br-sm">
+              ${text}
+            </div>
+          </div>
+        `;
+      }
+
+      function addBotMessage(text) {
+        chat.innerHTML += `
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center font-bold">
+              AI
+            </div>
+            <div class="max-w-xl bg-white border px-4 py-3 rounded-2xl rounded-bl-sm">
+              ${text}
+            </div>
+          </div>
+        `;
+      }
+
+      function addFallbackMessage() {
+        chat.innerHTML += `
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center font-bold">
+              !
+            </div>
+            <div class="max-w-xl bg-red-50 border border-red-200 px-4 py-3 rounded-2xl text-sm">
+              ❗ Savolingizga hozircha javob topilmadi.<br/>
+              Iltimos, <b>+998 (71) 202-8175</b> raqamiga bog‘laning.
+            </div>
+          </div>
+        `;
+      }
+
+      function addLoading(id) {
+        chat.innerHTML += `
+          <div id="${id}" class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center font-bold">
+              AI
+            </div>
+            <div class="bg-white border px-4 py-3 rounded-2xl animate-pulse">
+              Javob yozilmoqda...
+            </div>
+          </div>
+        `;
+      }
+
+      async function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
+
+        addUserMessage(text);
+        input.value = '';
+        chat.scrollTop = chat.scrollHeight;
+
+        const loadingId = 'loading-' + Date.now();
+        addLoading(loadingId);
+        chat.scrollTop = chat.scrollHeight;
+
+        try {
+          const res = await fetch('http://127.0.0.1:8000/ask', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: text }),
+          });
+
+          const data = await res.json();
+          document.getElementById(loadingId).remove();
+
+          if (
+            !data.answer ||
+            data.answer.toLowerCase().includes('aniqlanmadi')
+          ) {
+            addFallbackMessage();
+          } else {
+            addBotMessage(data.answer);
+          }
+        } catch (err) {
+          document.getElementById(loadingId).remove();
+          addFallbackMessage();
+        }
+
+        chat.scrollTop = chat.scrollHeight;
+      }
+    </script>
+  </body>
+</html>

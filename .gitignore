@@ -1,0 +1,31 @@
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+
+# Virtual environment
+venv/
+.env/
+
+# ===== FastAPI =====
+*.db
+*.pem
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Editor =====
+.vscode/
+.idea/
+
+# ===== Frontend =====
+node_modules/
+dist/
+build/
+
+# ===== Secrets =====
+.env
