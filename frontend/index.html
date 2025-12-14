@@ -122,7 +122,7 @@
         chat.scrollTop = chat.scrollHeight;
 
         try {
-          const res = await fetch('https://censusgpt.onrender.com/', {
+          const res = await fetch('https://censusgpt.onrender.com/ask', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question: text }),
