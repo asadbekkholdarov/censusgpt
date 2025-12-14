@@ -36,7 +36,7 @@
 
     <!-- Input Area -->
     <footer class="bg-white border-t p-4">
-      <br>
+      <br />
       <div class="max-w-4xl mx-auto flex gap-3">
         <input
           id="message"
@@ -52,7 +52,7 @@
           ➤
         </button>
       </div>
-      <br>
+      <br />
     </footer>
 
     <script>
@@ -122,7 +122,7 @@
         chat.scrollTop = chat.scrollHeight;
 
         try {
-          const res = await fetch('http://127.0.0.1:8000/ask', {
+          const res = await fetch('https://censusgpt.onrender.com/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question: text }),

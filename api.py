@@ -100,7 +100,7 @@ def root():
     }
 
 
-@app.post("/ask", response_model=AskResponse)
+@app.post("https://censusgpt.onrender.com/ask", response_model=AskResponse)
 def ask(req: AskRequest):
     user_question = req.question.strip()
 
