@@ -6,7 +6,7 @@ from translit import is_cyrillic, is_latin, latin_to_cyr, cyr_to_latin
 
 
 load_dotenv()
-API_KEY = "AIzaSyBrM7o102qnRfRqMS9bznm5SWaoOah1wWY-WQkdOIhkR1w510"
+API_KEY = "AIzaSyBuiiFLWZAvXHdRKltGX6uZaNwBd9x62wk"
 
 
 if not API_KEY:
